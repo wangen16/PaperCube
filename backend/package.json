@@ -1,0 +1,23 @@
+{
+  "name": "@papercube/system-api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db:init:exam": "node src/init-exam-db.mjs",
+    "db:init": "node src/init-db.mjs",
+    "db:remote": "ssh -N -L 3307:127.0.0.1:3306 ubuntu@106.54.60.136",
+    "dev": "node src/server.mjs",
+    "services:remote": "ssh -N -L 3307:127.0.0.1:3306 -L 9000:127.0.0.1:9000 ubuntu@106.54.60.136",
+    "minio:remote": "ssh -N -L 9000:127.0.0.1:9000 ubuntu@106.54.60.136",
+    "start": "node src/server.mjs",
+    "minio": "sh -c 'mkdir -p .minio/data && MINIO_ROOT_USER=\"${MINIO_ROOT_USER:-${MINIO_ACCESS_KEY:-minioadmin}}\" MINIO_ROOT_PASSWORD=\"${MINIO_ROOT_PASSWORD:-${MINIO_SECRET_KEY:-minioadmin}}\" ./minio server .minio/data --console-address \":9001\"'"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "busboy": "^1.6.0",
+    "minio": "^8.0.7",
+    "mysql2": "^3.19.1",
+    "pinyin-pro": "^3.28.0"
+  }
+}

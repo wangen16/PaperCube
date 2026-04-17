@@ -1,0 +1,11 @@
+.git
+.gitignore
+.vscode
+.codex-backups
+**/node_modules
+**/.pnpm-store
+**/dist
+**/.DS_Store
+frontend/node_modules
+frontend/dist
+backend/node_modules

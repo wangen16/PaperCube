@@ -1,0 +1,128 @@
+<script setup lang="ts">
+import type { VbenFormProps } from '@vben/common-ui';
+
+import type { VxeGridProps } from '#/adapter/vxe-table';
+import type { Student } from '#/api/school/student/model';
+
+import { Page, useVbenDrawer } from '@vben/common-ui';
+import { getVxePopupContainer } from '@vben/utils';
+
+import { Modal, Popconfirm, Space, Button } from 'ant-design-vue';
+
+import { useVbenVxeGrid, vxeCheckboxChecked } from '#/adapter/vxe-table';
+import {
+  studentList,
+  studentRemove,
+} from '#/api/school/student';
+
+import { columns, querySchema } from './data';
+import studentDrawer from './student-drawer.vue';
+
+const formOptions: VbenFormProps = {
+  commonConfig: {
+    labelWidth: 80,
+    componentProps: {
+      allowClear: true,
+    },
+  },
+  schema: querySchema(),
+  wrapperClass: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+};
+
+const gridOptions: VxeGridProps = {
+  checkboxConfig: {
+    highlight: true,
+    reserve: true,
+    trigger: 'cell',
+  },
+  columns,
+  height: 'auto',
+  keepSource: true,
+  pagerConfig: {},
+  proxyConfig: {
+    ajax: {
+      query: async ({ page }, formValues = {}) => {
+        return await studentList({
+          pageNum: page.currentPage,
+          pageSize: page.pageSize,
+          ...formValues,
+        });
+      },
+    },
+  },
+  rowConfig: {
+    keyField: 'studentId',
+  },
+  id: 'school-student-index',
+};
+
+const [BasicTable, tableApi] = useVbenVxeGrid({
+  formOptions,
+  gridOptions,
+});
+
+const [StudentDrawer, drawerApi] = useVbenDrawer({
+  connectedComponent: studentDrawer,
+});
+
+function handleAdd() {
+  drawerApi.setData({});
+  drawerApi.open();
+}
+
+function handleEdit(record: Student) {
+  drawerApi.setData({ id: record.studentId });
+  drawerApi.open();
+}
+
+async function handleDelete(row: Student) {
+  await studentRemove([row.studentId]);
+  await tableApi.query();
+}
+
+function handleMultiDelete() {
+  const rows = tableApi.grid.getCheckboxRecords();
+  const ids = rows.map((row: Student) => row.studentId);
+  Modal.confirm({
+    title: '提示',
+    okType: 'danger',
+    content: `确认删除选中的${ids.length}条记录吗？`,
+    onOk: async () => {
+      await studentRemove(ids);
+      await tableApi.query();
+    },
+  });
+}
+</script>
+
+<template>
+  <Page :auto-content-height="true">
+    <BasicTable table-title="学生列表">
+      <template #toolbar-tools>
+        <Space>
+          <Button :disabled="!vxeCheckboxChecked(tableApi)" danger type="primary"
+            v-access:code="['school:student:remove']" @click="handleMultiDelete">
+            {{ $t('pages.common.delete') }}
+          </Button>
+          <Button type="primary" v-access:code="['school:student:add']" @click="handleAdd">
+            {{ $t('pages.common.add') }}
+          </Button>
+        </Space>
+      </template>
+      <template #action="{ row }">
+        <Space>
+          <GhostButton v-access:code="['school:student:edit']" @click="handleEdit(row)">
+            {{ $t('pages.common.edit') }}
+          </GhostButton>
+          <Popconfirm :get-popup-container="getVxePopupContainer" placement="left" title="确认删除？"
+            @confirm="handleDelete(row)">
+            <GhostButton danger v-access:code="['school:student:remove']" @click.stop="">
+              {{ $t('pages.common.delete') }}
+            </GhostButton>
+          </Popconfirm>
+        </Space>
+      </template>
+    </BasicTable>
+    <StudentDrawer @reload="tableApi.query()" />
+  </Page>
+</template>

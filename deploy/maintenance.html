@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>服务维护中</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at top, rgba(52, 110, 255, 0.16), transparent 38%),
+        linear-gradient(180deg, #f7f9fd 0%, #edf2fb 100%);
+      padding: 24px;
+    }
+
+    .panel {
+      width: min(560px, 100%);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(31, 59, 115, 0.08);
+      border-radius: 24px;
+      padding: 36px 32px;
+      box-shadow: 0 18px 60px rgba(18, 38, 82, 0.12);
+      backdrop-filter: blur(12px);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #e8efff;
+      color: #2f5bea;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: 32px;
+      line-height: 1.2;
+    }
+
+    p {
+      margin: 0;
+      color: #4b5875;
+      font-size: 16px;
+      line-height: 1.75;
+    }
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <div class="badge">MAINTENANCE</div>
+    <h1>服务维护中</h1>
+    <p>系统正在发布或迁移数据，接口会短暂不可用。请稍后刷新页面再试。</p>
+  </main>
+</body>
+</html>

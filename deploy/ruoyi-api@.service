@@ -1,0 +1,17 @@
+[Unit]
+Description=RuoYi Admin Node API Instance %i
+After=network.target mariadb.service docker.service
+Requires=mariadb.service docker.service
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+EnvironmentFile=/etc/default/ruoyi-api-%i
+WorkingDirectory=/srv/ruoyi-admin/backend
+ExecStart=/usr/local/bin/npm run start
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

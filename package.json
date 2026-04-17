@@ -1,0 +1,7 @@
+{
+  "name": "papercube",
+  "description": "Repository root for the independent frontend and backend applications.",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.14.0"
+}
